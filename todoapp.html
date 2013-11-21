@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+<head>
+  <title>Do it todo</title>
+  <meta charset = "UTF-8" />
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+  <script type="text/javascript">
+		 $(document).ready(function() { 
+		    
+		      var i = 0;
+		      
+		      // Initial loading of tasks
+		      for( i = 0; i < localStorage.length; i++)
+		        $("#tasks").append("<li id='task-"+ i +"'>" + localStorage.getItem('task-'+i) + " <a href='#'>x</a></li>");
+		        
+		      // Add a task
+		      $("#tasks-form").submit(function() {
+		        if (  $("#task").val() != "" ) {
+		          localStorage.setItem( "task-"+i, $("#task").val() );
+		          $("#tasks").append("<li id='task-"+i+"'>"+localStorage.getItem("task-"+i)+" <a href='#'>x</a></li>")
+		          $("#task").val("");
+		          i++;
+		        }
+		        return false;
+		      });
+		      
+		      // Remove a task      
+		      $("#tasks li a").live("click", function() {
+		        localStorage.removeItem($(this).parent().attr("id"));
+		        $(this).parent().fadeOut('slow', function() { $(this).remove(); } );
+		        for(i=0; i<localStorage.length; i++) {
+		          if( !localStorage.getItem("task-"+i)) {
+		            localStorage.setItem("task-"+i, localStorage.getItem('task-' + (i+1) ) );
+		            localStorage.removeItem('task-'+ (i+1) );
+		          }
+		        }
+		      });
+		    }); 
+
+  </script>
+
+</head>
+<body>
+<section id="main-content">
+    <div class="form-area">
+      <form id="tasks-form">
+        <label for="task">Add a task here and hit enter</label>
+        <input id="task" autofocus>
+      </form>
+    </div>
+  
+    <ul id="tasks"></ul>
+  </section>
+
+
+</body>
+</html>
